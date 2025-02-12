@@ -24,8 +24,7 @@ const { Server, Socket } = require("socket.io");
 const getPrismaInstance = require("./utils/PrismaClient");
  
 const { connection } = require("./utils/database");
-const { cloudinaryConnect } = require("./utils/cloudinary");
- 
+const{cloudinaryConnect} = require("./utils/Cloudinary")
 //Mountaing 
 app.use("/api/auth",AuthRoutes);
 app.use("/api/messages",MessageRoutes);
