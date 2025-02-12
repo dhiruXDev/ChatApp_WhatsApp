@@ -1,0 +1,85 @@
+ socket.current.on("add-new-status", ({ userId, status }) => {
+              console.log("Socket event: add-new-status", status);
+          
+              if (userId === UserInfo.id) {
+                  // ✅ Case 1: If incoming status belongs to the current user (My Status)
+                  dispatch({
+                      type: reducerCases.SET_MY_STATUS,
+                      myStatuses: (() => {
+                          if (!myStatus || myStatus.length === 0) {
+                              // 🟢 If the user has no previous status, create a new entry
+                              return [{ user: { id: userId }, statuses: [status] }];
+                          } else {
+                              // 🔄 If the user already has statuses, add the new one at the beginning
+                              return myStatus.map(userStatus =>
+                                  userStatus.user.id === userId
+                                      ? { ...userStatus, statuses: [status, ...userStatus.statuses] }
+                                      : userStatus
+                              );
+                          }
+                      })()
+                  });
+              } else {
+                  // ✅ Case 2 & 3: Handle `recentlyUpdatesStatus`
+                  dispatch({
+                      type: reducerCases.SET_RECENTLY_UPDATES_STATUS,
+                      statuses: (() => {
+                          const updatedStatuses = [...recentlyUpdatesStatus]; // Clone to avoid mutation
+                          const userIndex = updatedStatuses.findIndex(userStatus => userStatus.user.id === userId);
+          
+                          if (userIndex !== -1) {
+                              // 🔄 If the user exists, add the new status at the beginning
+                              updatedStatuses[userIndex] = {
+                                  ...updatedStatuses[userIndex],
+                                  statuses: [status, ...updatedStatuses[userIndex].statuses]
+                              };
+                          } else {
+                              // 🟢 If the user is new, create a new entry at the beginning
+                              updatedStatuses.unshift({
+                                  user: { id: userId }, // Add user details if needed
+                                  statuses: [status]
+                              });
+                          }
+          
+                          return updatedStatuses;
+                      })()
+                  });
+              }
+           });
+
+
+           useEffect(() => {
+            const getAllStatus = async () => {
+                try {
+                    const res = await axios.get(GET_ALL_STATUS_API);
+                    console.log("All statuses:", res);
+        
+                    const statuses = res.data.statuses || []; // Ensure it's an array
+        
+                    // Separate My Status and Other Users' Statuses
+                    const myStatuses = statuses.filter(status => status.user.id === UserInfo.id);
+                    const otherUsersStatuses = statuses.filter(status => status.user.id !== UserInfo.id);
+                    console.log(" seprate",myStatuses,otherUsersStatuses);
+                    // Dispatch separately
+                    dispatch({ type: reducerCases.SET_MY_STATUS, myStatuses });
+                    dispatch({ type: reducerCases.SET_RECENTLY_UPDATES_STATUS, otherUsersStatuses });
+        
+                } catch (error) {
+                    console.error("Error fetching statuses:", error);
+                }
+            };
+        
+            getAllStatus();
+        }, []);
+
+
+
+
+
+        useEffect(() => {
+            if (!recentlyUpdatesStatus) return;
+            const myStatuses = recentlyUpdatesStatus.filter(element => element.user.id === UserInfo.id);
+            // setUserStatus(myStatuses);  // ✅ Update state once
+            dispatch({type : reducerCases.SET_MY_STATUS , myStatuses})
+          }, [recentlyUpdatesStatus]);
+        

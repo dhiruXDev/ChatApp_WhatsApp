@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// In Prisma, model names in your schema are automatically converted to lowercase when generating queries, so both Messages and messages refer to the same model.
+model User {
+  id              Int        @id @default(autoincrement())
+  name            String
+  email           String     @unique
+  about           String
+  profilePicture  String     @default("")
+  sentMessage     Messages[] @relation("sentMessage")
+  recievedMessage Messages[] @relation("recievedMessage")
+
+  statuses Status[]     @relation("userStatuses")
+  views    StatusView[]
+}
+
+model Messages {
+  id            Int      @id @default(autoincrement())
+  sender        User     @relation("sentMessage", fields: [senderId], references: [id])
+  senderId      Int
+  reciever      User     @relation("recievedMessage", fields: [recieverId], references: [id])
+  recieverId    Int
+  type          String   @default("text")
+  message       String
+  messageStatus String   @default("sent")
+  createdAt     DateTime @default(now())
+}
+
+model Status {
+  id              Int          @id @default(autoincrement())
+  user            User         @relation("userStatuses", fields: [userId], references: [id])
+  userId          Int
+  type            String       @default("text") // "text", "image", "video", "emoji"
+  content         String // Stores media URL or text
+  fontStyle       String? // Only for text status
+  backgroundColor String? // Only for text status
+  createdAt       DateTime     @default(now())
+  expiresAt       DateTime // Auto-expire after 24 hours
+  views           StatusView[]
+}
+
+model StatusView {
+  id       Int      @id @default(autoincrement())
+  user     User     @relation(fields: [userId], references: [id])
+  userId   Int
+  status   Status   @relation(fields: [statusId], references: [id])
+  statusId Int
+  viewedAt DateTime @default(now())
+}
