@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use( cors({
-    origin : "https://chat-app-whats-app-kz7s.vercel.app/",
+    origin : "https://chat-app-whats-app.vercel.app/",
     credentials:true
 }))
 
@@ -58,7 +58,7 @@ const server = app.listen(PORT , ()=>{
 //Establish the socket here 
 const io = new Server(server , {
     cors : {
-        origin : "https://chat-app-whats-app-kz7s.vercel.app/",
+        origin : "https://chat-app-whats-app.vercel.app/",
     }
 })
  
