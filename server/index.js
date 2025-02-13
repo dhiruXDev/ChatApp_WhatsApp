@@ -4,8 +4,18 @@ const app = express();                // Initilizing the express module
 const cors =require("cors");
 require("dotenv").config();
 const FileUpload = require("express-fileupload");
-
+const {cloudinaryConnecter}= require("./utils/Cloudinary")
+const { connection } = require("./utils/database");
+const{cloudinaryConnect} = require("./utils/Cloudinary")
+const AuthRoutes = require("./routes/AuthRoutes");
+const MessageRoutes = require("./routes/MessageRoutes");
+const StatusRoutes = require("./routes/StatusRoutes")
+// const GroupRoutes = require("./routes/GroupRoutes")
+const { Server, Socket } = require("socket.io");
+const getPrismaInstance = require("./utils/PrismaClient");
 const PORT = process.env.PORT || 4000;
+
+
 //Middleware
 app.use(express());
 app.use(express.json());
@@ -16,15 +26,9 @@ app.use( cors({
     credentials:true
 }))
 
-const AuthRoutes = require("./routes/AuthRoutes");
-const MessageRoutes = require("./routes/MessageRoutes");
-const StatusRoutes = require("./routes/StatusRoutes")
-// const GroupRoutes = require("./routes/GroupRoutes")
-const { Server, Socket } = require("socket.io");
-const getPrismaInstance = require("./utils/PrismaClient");
+
  
-const { connection } = require("./utils/database");
-const{cloudinaryConnect} = require("./utils/Cloudinary")
+
 //Mountaing 
 app.use("/api/auth",AuthRoutes);
 app.use("/api/messages",MessageRoutes);
@@ -43,7 +47,7 @@ app.use(
 
 
 // conecting cloudinary  For uplaoding the Img & Video into MongoDB 
-cloudinaryConnect();
+cloudinaryConnecter();
 connection();
 
 const server = app.listen(PORT , ()=>{
