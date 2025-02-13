@@ -4,7 +4,7 @@ const app = express();                // Initilizing the express module
 const cors =require("cors");
 require("dotenv").config();
 const FileUpload = require("express-fileupload");
-//const {cloudinaryConnecter}= require("./utils/Cloudinary.js")
+const {cloudinaryConnecter}= require("./utils/Cloudinary")
 const { connection } = require("./utils/database");
 
 const AuthRoutes = require("./routes/AuthRoutes");
@@ -14,18 +14,8 @@ const StatusRoutes = require("./routes/StatusRoutes")
 const { Server, Socket } = require("socket.io");
 const getPrismaInstance = require("./utils/PrismaClient");
 const PORT = process.env.PORT || 4000;
-const cloudinary = require("cloudinary").v2;
-cloudinaryConnecter = ()=>{
-    try {
-            cloudinary.config({
-                cloud_name: process.env.CLOUD_NAME,
-                api_key :process.env.API_KEY ,
-                api_secret: process.env.API_SECRET
-            })
-    } catch (error) {
-        console.log(error);
-    }
-}
+
+ 
 //Middleware
 app.use(express());
 app.use(express.json());
