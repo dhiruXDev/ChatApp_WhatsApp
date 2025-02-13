@@ -4,9 +4,9 @@ const app = express();                // Initilizing the express module
 const cors =require("cors");
 require("dotenv").config();
 const FileUpload = require("express-fileupload");
-const {cloudinaryConnecter}= require("./utils/Cloudinary")
+const {cloudinaryConnecter}= require("./utils/Cloudinary.js")
 const { connection } = require("./utils/database");
-const{cloudinaryConnect} = require("./utils/Cloudinary")
+
 const AuthRoutes = require("./routes/AuthRoutes");
 const MessageRoutes = require("./routes/MessageRoutes");
 const StatusRoutes = require("./routes/StatusRoutes")
