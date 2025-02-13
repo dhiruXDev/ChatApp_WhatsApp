@@ -29,7 +29,7 @@ function ChatList({setShowCreateGroupContextMenu}) {
             }
    },[contactPage])
 
-  return <div className=" w-full flex flex-col bg-panel-header-background  border-slate-700  overflow-auto border-r  z-10  ">
+  return <div className=" w-full flex flex-col bg-panel-header-background  border-slate-700  overflow-auto border-r  z-[5]  ">
          {
              pageType === "default" &&(
                           <>
