@@ -1,4 +1,4 @@
-const cloudinary = require("../utils/cloudinary");
+//const cloudinary = require("../utils/cloudinary");
 const multer = require("multer");
 const getPrismaInstance = require("../utils/PrismaClient");
 const uploadImgToCloudinary = require("../utils/uploadImgToCloduniary");
