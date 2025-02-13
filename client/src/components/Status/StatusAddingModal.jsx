@@ -153,7 +153,7 @@ export const StatusAddingModal = ({ setStatusUpdationModal ,setLoading }) => {
                     )}
                 </div>
                 {/* Footer Section */}
-                <div className='flex justify-between items-center h-12 px-2 py-2 text-white bg-panel-header-background bg-opacity-80 rounded-b-md'>
+                <div className='flex justify-between items-center z-50  h-12 px-2 py-2 text-white bg-panel-header-background bg-opacity-80 rounded-b-md'>
                     <div className='flex gap-x-1'>
                         <label className={`${statusType === 'video' ? "bg-gray-900 bg-opacity-50" : ""} cursor-pointer flex items-center gap-1 px-3 py-1 text-sm rounded-2xl text-white hover:bg-gray-900 hover:bg-opacity-50`} onClick={() => setStatusType("video")}>  
                             Video
